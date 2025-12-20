@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Quản lý Học sinh</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/table.css">
+    <link rel="stylesheet" href="assets/css/forms.css">
+</head>
+<body>
+
+    <header class="top-header">
+        <div class="logo">QLHS</div>
+    </header>
+
+    <div class="wrapper">
+        <aside class="sidebar">
+            <ul class="menu">
+                <li class="menu-item active" id="menu-home">
+                    <a href="#"><i class="fas fa-home"></i> Trang chủ</a>
+                </li>
+                
+                <li class="menu-item has-submenu">
+                    <div class="submenu-header">
+                        <span><i class="fas fa-user-cog"></i> Quản lý tài khoản</span>
+                        <i class="fas fa-chevron-up arrow"></i>
+                    </div>
+                    <ul class="submenu-list">
+                        <li><a href="#" id="menu-user-list">• Danh sách tài khoản</a></li>
+                        <li><a href="javascript:void(0)" id="menu-permission">• Phân quyền</a></li>                    </ul>
+                </li>
+
+                <li class="menu-item" id="menu-students">
+                    <a href="#"><i class="fas fa-user-graduate"></i> Quản lý học sinh</a>
+                </li>
+                <li class="menu-item" id="menu-scores">
+                    <a href="#"><i class="fas fa-chart-line"></i> Quản lý điểm</a>
+                </li>
+                <li class="menu-item" id="menu-docs">
+                    <a href="#"><i class="fas fa-folder-open"></i> Quản lý tài liệu</a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="main-content" id="content-area">
+            <div class="welcome-screen">
+                <h1>Xin Chào</h1>
+            </div>
+        </main>
+    </div>
+    <script src="assets/js/students.js"></script>
+    <script src="assets/js/documents.js"></script>
+    <script src="assets/js/scores.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/permissions.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

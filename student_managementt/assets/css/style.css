@@ -1,0 +1,163 @@
+:root {
+    --primary-color: #168a7d;
+    --sidebar-width: 260px;
+    --text-color: #333;
+    --bg-light: #f4f7f6;
+    --hover-bg: #f0f0f0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Ngăn cuộn toàn trang, chỉ cuộn từng phần */
+}
+
+/* --- Header --- */
+.top-header {
+    height: 50px;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.wrapper {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+    width: var(--sidebar-width);
+    background: white;
+    border-right: 1px solid #ddd;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+}
+
+.menu {
+    list-style: none;
+    padding-top: 10px;
+}
+
+/* Style chung cho link và header của menu con */
+.menu-item a, .submenu-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: background 0.3s;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.menu-item i:first-child {
+    width: 25px;
+    font-size: 1.1rem;
+    margin-right: 10px;
+}
+
+/* Trạng thái Hover và Active */
+.menu-item:hover {
+    background-color: var(--hover-bg);
+}
+
+.menu-item.active {
+    background-color: #e8f4f2;
+    border-right: 3px solid var(--primary-color);
+}
+
+.menu-item.active > a, 
+.menu-item.active > .submenu-header span {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* --- Submenu Logic --- */
+.submenu-header {
+    justify-content: space-between;
+}
+
+.submenu-list {
+    list-style: none;
+    padding-left: 20px;
+    background: #fafafa;
+    max-height: 0; /* Mặc định ẩn bằng chiều cao */
+    overflow: hidden;
+    transition: max-height 0.3s ease-out; /* Hiệu ứng trượt mượt */
+}
+
+/* Khi có class .open thì hiển thị submenu */
+.menu-item.has-submenu.open .submenu-list {
+    max-height: 200px; /* Độ cao đủ để chứa các item */
+}
+
+.submenu-list li a {
+    padding: 10px 20px;
+    font-size: 13px;
+    color: #555;
+}
+
+.submenu-list li a:hover {
+    color: var(--primary-color);
+}
+
+/* Hiệu ứng xoay mũi tên */
+.arrow {
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+}
+
+.menu-item.has-submenu.open .arrow {
+    transform: rotate(180deg);
+}
+
+/* --- Main Content Area --- */
+.main-content {
+    flex: 1;
+    background-color: white;
+    overflow-y: auto; /* Cuộn nội dung nếu bảng quá dài */
+    padding: 20px;
+    position: relative;
+}
+
+/* Màn hình chào mừng */
+.welcome-screen {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-screen h1 {
+    font-size: 4rem;
+    color: #4a4a4a;
+    font-weight: 500;
+}
+
+/* Làm nổi bật menu cha khi menu con được chọn */
+.menu-item.active {
+    background-color: #f0f7f6;
+    border-left: 4px solid var(--primary-color);
+}
+
+/* Avatar nhỏ cho tài khoản */
+.user-info .avatar-circle {
+    background: #e1f0ee;
+    color: var(--primary-color);
+}
