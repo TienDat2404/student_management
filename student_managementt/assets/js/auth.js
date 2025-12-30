@@ -1,6 +1,3 @@
-/**
- * Dữ liệu mẫu danh sách tài khoản
- */
 let allAccounts = [
     { id: '00000001', username: 'nguyenvana@tinviet.com', phone: '0123456789', name: 'Nguyễn A', role: 'Giáo viên', status: 'Hoạt động' },
     { id: '00000002', username: 'tranthibich2@tinviet.com', phone: '0901000002', name: 'Trần Bích', role: 'Học sinh', status: 'Tạm dừng' },
@@ -95,6 +92,10 @@ const authTemplate = `
                             <option value="Tạm dừng">Tạm dừng</option>
                         </select>
                     </div>
+                </div>
+                <div class="input-box margin-b-15">
+                    <label>Số điện thoại *</label>
+                    <input type="tel" id="auth-phone" placeholder="Nhập số điện thoại" pattern="[0-9]{10}" title="Vui lòng nhập đúng định dạng số điện thoại" required>
                 </div>
                 <div id="permission-section" style="display:none; border-top: 1px solid #eee; padding-top: 10px;">
                     <label style="font-weight:600; font-size:14px;">Phân quyền chi tiết:</label>

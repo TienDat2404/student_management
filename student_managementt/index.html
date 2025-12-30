@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/table.css">
     <link rel="stylesheet" href="assets/css/forms.css">
+    <style>
+        .menu-item i { width: 20px; text-align: center; margin-right: 10px; }
+    </style>
 </head>
 <body>
 
@@ -29,17 +32,21 @@
                     </div>
                     <ul class="submenu-list">
                         <li><a href="#" id="menu-user-list">• Danh sách tài khoản</a></li>
-                        <li><a href="javascript:void(0)" id="menu-permission">• Phân quyền</a></li>                    </ul>
+                        <li><a href="#" id="menu-permission">• Phân quyền</a></li>
+                    </ul>
                 </li>
 
                 <li class="menu-item" id="menu-students">
-                    <a href="#"><i class="fas fa-user-graduate"></i> Quản lý học sinh</a>
+                    <a href="#"><i class="fas fa-user-graduate"></i> Quản lý thông tin</a>
                 </li>
                 <li class="menu-item" id="menu-scores">
                     <a href="#"><i class="fas fa-chart-line"></i> Quản lý điểm</a>
                 </li>
                 <li class="menu-item" id="menu-docs">
                     <a href="#"><i class="fas fa-folder-open"></i> Quản lý tài liệu</a>
+                </li>
+                <li class="menu-item" id="menu-schedule">
+                    <a href="#"><i class="fas fa-calendar-alt"></i> Quản lý lịch</a>
                 </li>
             </ul>
         </aside>
@@ -50,11 +57,13 @@
             </div>
         </main>
     </div>
+
     <script src="assets/js/students.js"></script>
     <script src="assets/js/documents.js"></script>
     <script src="assets/js/scores.js"></script>
     <script src="assets/js/auth.js"></script>
     <script src="assets/js/permissions.js"></script>
+    <script src="assets/js/schedule.js"></script>
     <script src="assets/js/main.js"></script>
 </body>
 </html>

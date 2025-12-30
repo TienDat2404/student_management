@@ -227,8 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btnPrint) btnPrint.onclick = () => window.print();
     });
 
-    // 5. Xử lý click cho "Danh sách tài khoản"
-    // 5. Xử lý click cho "Danh sách tài khoản"
+    // Xử lý click cho "Danh sách tài khoản"
     document.getElementById('menu-user-list').addEventListener('click', function() {
         clearActiveMenu();
         this.closest('.menu-item').classList.add('active');
@@ -241,16 +240,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const permissionSection = document.getElementById('permission-section');
         const saveBtn = document.getElementById('btn-save-auth');
 
-        // Hàm đóng modal và RESET TRẠNG THÁI
         const hideModal = () => {
             modalAuth.style.display = "none";
             formAuth.reset();
             permissionSection.style.display = "none";
             
-            // Mở khóa lại tất cả để đảm bảo nút Lưu hoạt động cho lần sau
             formAuth.querySelectorAll('input, select').forEach(el => el.disabled = false);
             saveBtn.style.display = "block";
-            saveBtn.disabled = false; // Mở khóa nút lưu
+            saveBtn.disabled = false; 
         };
 
         // Mở modal thêm tài khoản
@@ -319,30 +316,26 @@ document.addEventListener('DOMContentLoaded', () => {
         formAuth.onsubmit = (e) => {
             e.preventDefault();
             
-            // 1. Lấy vị trí index từ input ẩn (được gán khi bấm icon bút chì)
+            // Lấy vị trí index từ input ẩn (được gán khi bấm icon bút chì)
             const index = document.getElementById('edit-auth-index').value;
             
-            // 2. Thu thập dữ liệu mới từ form
+            // Thu thập dữ liệu mới từ form
             const accountData = {
                 name: document.getElementById('auth-name').value,
                 username: document.getElementById('auth-email').value,
                 role: document.getElementById('auth-role').value,
                 status: document.getElementById('auth-status').value,
-                // Giữ nguyên số điện thoại cũ hoặc gán mặc định nếu thêm mới
-                phone: index !== "" ? allAccounts[index].phone : "0123456789"
+                phone: document.getElementById('auth-phone').value
             };
 
             if (index === "") {
-                // TRƯỜNG HỢP: THÊM MỚI
                 const newAccount = {
                     id: "0000000" + (allAccounts.length + 1),
                     ...accountData
                 };
-                allAccounts.unshift(newAccount); // Thêm vào đầu mảng
+                allAccounts.unshift(newAccount); 
                 alert("Thêm tài khoản mới thành công!");
             } else {
-                // TRƯỜNG HỢP: SỬA DỮ LIỆU
-                // Cập nhật phần tử tại vị trí index
                 allAccounts[index] = { 
                     ...allAccounts[index], 
                     ...accountData 
@@ -350,10 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("Cập nhật thông tin tài khoản thành công!");
             }
 
-            // 3. QUAN TRỌNG: Gọi hàm render lại bảng để hiển thị dữ liệu mới
             renderAuthTable(allAccounts);
-            
-            // 4. Đóng modal và reset trạng thái form
             hideModal();
         };
     });
@@ -397,7 +387,64 @@ document.addEventListener('DOMContentLoaded', () => {
         const btnSave = document.getElementById('btn-save-perm');
         if (btnSave) btnSave.onclick = () => alert("Đã cập nhật cấu hình phân quyền!");
     });
+    // Thêm vào trong DOMContentLoaded của main.js
+    document.getElementById('menu-schedule').addEventListener('click', function() {
+        clearActiveMenu();
+        this.classList.add('active');
+        contentArea.innerHTML = scheduleTemplate;
+        
+        // 1. Hàm dùng chung để lấy tất cả giá trị lọc hiện tại và vẽ lại bảng
+        const updateView = () => {
+            const activeTab = document.querySelector('.schedule-manager .tab.active');
+            const type = activeTab.getAttribute('data-type');
+            
+            if (type === 'learning') {
+                // Lọc đồng thời cả Khối và Lớp
+                renderSchedule('learning', { 
+                    grade: document.getElementById('filter-grade').value,
+                    className: document.getElementById('filter-class').value 
+                });
+            } else {
+                // Lọc đồng thời cả Môn học và Giáo viên
+                renderSchedule('teaching', { 
+                    subject: document.getElementById('filter-subject').value,
+                    teacher: document.getElementById('filter-teacher').value 
+                });
+            }
+        };
 
+        // 2. Khởi tạo bảng lần đầu khi vừa mở tab
+        updateView();
+
+        // 3. Xử lý chuyển tab Lịch học / Lịch dạy
+        const tabs = document.querySelectorAll('.schedule-manager .tab');
+        tabs.forEach(tab => {
+            tab.onclick = function() {
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                const type = this.getAttribute('data-type');
+                const isTeaching = (type === 'teaching');
+
+                // Ẩn hiện bộ lọc tương ứng
+                document.getElementById('filter-teaching').style.display = isTeaching ? 'flex' : 'none';
+                document.getElementById('filter-learning').style.display = isTeaching ? 'none' : 'flex';
+                
+                // Cập nhật lại bảng theo tab mới
+                updateView();
+            };
+        });
+
+        // 4. Gán sự kiện thay đổi cho TẤT CẢ các bộ lọc (Khối, Lớp, Môn, Giáo viên)
+        // Chỉ cần thay đổi 1 ô bất kỳ, hàm updateView sẽ lấy đủ thông tin để lọc chính xác
+        const filterIds = ['filter-grade', 'filter-class', 'filter-subject', 'filter-teacher'];
+        filterIds.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.onchange = updateView;
+            }
+        });
+    });
     // 7. Xử lý đóng/mở Submenu Sidebar
     const submenuHeader = document.querySelector('.submenu-header');
     if (submenuHeader) {
