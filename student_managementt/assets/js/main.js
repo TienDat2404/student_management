@@ -392,26 +392,56 @@ document.addEventListener('DOMContentLoaded', () => {
         clearActiveMenu();
         this.classList.add('active');
         contentArea.innerHTML = scheduleTemplate;
-        
+        // Thiết lập ngày mặc định là hôm nay cho cả 2 tab
+        const todayStr = new Date().toISOString().split('T')[0];
+        const dateLearnInput = document.getElementById('filter-date-learning');
+        const dateTeachInput = document.getElementById('filter-date-teaching');
+        if (dateLearnInput) dateLearnInput.value = todayStr;
+        if (dateTeachInput) dateTeachInput.value = todayStr;
         // 1. Hàm dùng chung để lấy tất cả giá trị lọc hiện tại và vẽ lại bảng
         const updateView = () => {
+            // Cập nhật tiêu đề hiển thị tuần trên giao diện
             const activeTab = document.querySelector('.schedule-manager .tab.active');
             const type = activeTab.getAttribute('data-type');
             
+            // Lấy giá trị ngày từ ô input tương ứng
+            const dateInput = type === 'learning' 
+                ? document.getElementById('filter-date-learning').value 
+                : document.getElementById('filter-date-teaching').value;
+
+            const titleEl = document.getElementById('week-display');
+            if (titleEl && dateInput) {
+                titleEl.innerText = "Tuần: " + getWeekRange(dateInput);
+            }
+
+            // Gọi hàm render dữ liệu (Logic lọc theo ngày cụ thể có thể nâng cấp thêm ở đây)
             if (type === 'learning') {
-                // Lọc đồng thời cả Khối và Lớp
                 renderSchedule('learning', { 
                     grade: document.getElementById('filter-grade').value,
-                    className: document.getElementById('filter-class').value 
+                    className: document.getElementById('filter-class').value,
+                    date: dateInput // Gửi thêm ngày để xử lý nếu cần
                 });
             } else {
-                // Lọc đồng thời cả Môn học và Giáo viên
                 renderSchedule('teaching', { 
                     subject: document.getElementById('filter-subject').value,
-                    teacher: document.getElementById('filter-teacher').value 
+                    teacher: document.getElementById('filter-teacher').value,
+                    date: dateInput
                 });
             }
         };
+    // 2. Xử lý khi đổi Khối -> Cập nhật danh sách Lớp tương ứng
+        const gradeSelect = document.getElementById('filter-grade');
+        if (gradeSelect) {
+            gradeSelect.addEventListener('change', (e) => {
+                if (typeof updateClassOptions === "function") {
+                    updateClassOptions(e.target.value);
+                }
+                updateView();
+            });
+        }
+
+        // 3. Khởi tạo danh sách lớp mặc định cho Khối 12 và vẽ bảng lần đầu
+        if (typeof updateClassOptions === "function") updateClassOptions("12");
 
         // 2. Khởi tạo bảng lần đầu khi vừa mở tab
         updateView();
@@ -437,11 +467,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 4. Gán sự kiện thay đổi cho TẤT CẢ các bộ lọc (Khối, Lớp, Môn, Giáo viên)
         // Chỉ cần thay đổi 1 ô bất kỳ, hàm updateView sẽ lấy đủ thông tin để lọc chính xác
-        const filterIds = ['filter-grade', 'filter-class', 'filter-subject', 'filter-teacher'];
+        const filterIds = ['filter-class', 'filter-subject', 'filter-teacher', 'filter-date-learning', 'filter-date-teaching'];
         filterIds.forEach(id => {
             const element = document.getElementById(id);
             if (element) {
-                element.onchange = updateView;
+                // Dùng 'input' cho ngày tháng để bảng cập nhật tức thì
+                const eventType = element.type === 'date' ? 'input' : 'change';
+                element.addEventListener(eventType, updateView);
             }
         });
     });
